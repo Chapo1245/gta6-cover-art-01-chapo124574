@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">
+<title>Neon Coast Cover Studio — Vice City Cover Studio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><span class="brand-mark">NC</span>
+    <div><h1>NEON COAST <span>COVER STUDIO</span></h1><p>Turn your photos into GTA-style multi-panel poster cover art. 100% offline — photos never leave your machine.</p></div>
+  </div>
+  <ol class="steps" aria-label="Steps">
+    <li data-step="1" class="active"><b>1</b> Add photos</li>
+    <li data-step="2"><b>2</b> Pick a layout &amp; grade</li>
+    <li data-step="3"><b>3</b> Export PNG</li>
+  </ol>
+</header>
+<main class="studio">
+  <section class="controls" aria-label="Cover controls">
+    <div class="panel">
+      <h2>Photos <span class="hint">up to 4 — click a sample or upload your own</span></h2>
+      <div class="photostrip" id="photoStrip"></div>
+      <div class="row">
+        <label class="upload-btn">+ Upload photos
+          <input type="file" id="fileInput" accept="image/*" multiple hidden>
+        </label>
+        <button id="sampleBtn" class="btn ghost" type="button">Load 3 samples</button>
+        <button id="clearBtn" class="btn ghost" type="button">Clear</button>
+      </div>
+      <p class="tiny">Tip: one photo can fill every panel — pick a panel below, then choose which photo it shows.</p>
+    </div>
+
+    <div class="panel">
+      <h2>Layout <span class="hint" id="layoutName">Hero Grid</span></h2>
+      <div class="layout-grid" id="layoutGrid"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Sunset / neon grade</h2>
+      <div class="grade-grid" id="gradeGrid"></div>
+      <div class="toggles">
+        <label><input type="checkbox" id="grainToggle" checked> Film grain</label>
+        <label><input type="checkbox" id="vignetteToggle" checked> Vignette</label>
+        <label><input type="checkbox" id="halftoneToggle" checked> Halftone title block</label>
+        <label><input type="checkbox" id="borderToggle" checked> Inked panel borders</label>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Caption &amp; title</h2>
+      <label class="field">Title
+        <input id="titleInput" type="text" value="NEON SHORE" maxlength="24" spellcheck="false">
+      </label>
+      <label class="field">Subtitle (script)
+        <input id="subtitleInput" type="text" value="Vice City nights" maxlength="40" spellcheck="false">
+      </label>
+      <div class="row">
+        <label class="field grow">Badge ribbon
+          <input id="badgeInput" type="text" value="★ HEAT 5 — VICE CITY" maxlength="32" spellcheck="false">
+        </label>
+        <label class="field">Title size
+          <input id="titleSize" type="range" min="70" max="150" value="110">
+        </label>
+      </div>
+      <div class="row">
+        <label class="field grow">Title position
+          <select id="titlePos">
+            <option value="bottom">Bottom band</option>
+            <option value="top">Top band</option>
+            <option value="hero">Over hero panel</option>
+          </select>
+        </label>
+        <label class="field grow">Title style
+          <select id="titleStyle">
+            <option value="gradient">Sunset gradient</option>
+            <option value="white">White ink</option>
+            <option value="neon">Neon outline</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Selected panel <span class="hint" id="panelLabel">Panel 1 — click the preview to pick one</span></h2>
+      <div class="row">
+        <label class="field grow">Photo in this panel
+          <select id="panelPhoto"></select>
+        </label>
+        <button id="fillAllBtn" class="btn ghost" type="button">Fill all panels with this photo</button>
+      </div>
+      <label class="field">Zoom <span id="zoomVal">100%</span>
+        <input id="zoomSlider" type="range" min="100" max="300" value="100">
+      </label>
+      <div class="row">
+        <label class="field grow">Pan X <input id="panX" type="range" min="-100" max="100" value="0"></label>
+        <label class="field grow">Pan Y <input id="panY" type="range" min="-100" max="100" value="0"></label>
+      </div>
+      <p class="tiny">Or drag the photo inside the preview to pan it. Scroll over a panel to zoom.</p>
+    </div>
+
+    <div class="panel actions">
+      <div class="row">
+        <button id="undoBtn" class="btn" type="button" disabled>↩ Undo</button>
+        <button id="redoBtn" class="btn" type="button" disabled>↪ Redo</button>
+        <button id="shuffleBtn" class="btn" type="button">🎲 Shuffle</button>
+      </div>
+      <label class="field">Export size
+        <select id="sizeSelect">
+          <option value="1080x1080">1080 × 1080 — Square post</option>
+          <option value="1080x1350" selected>1080 × 1350 — Portrait post</option>
+          <option value="1920x1080">1920 × 1080 — Landscape / wallpaper</option>
+          <option value="1080x1920">1080 × 1920 — Story</option>
+        </select>
+      </label>
+      <button id="exportBtn" class="btn primary big" type="button">⬇ Export cover PNG</button>
+      <p class="tiny center" id="statusLine">Ready — load a sample to start, or upload your own photo.</p>
+    </div>
+  </section>
+
+  <section class="preview" aria-label="Live preview">
+    <div class="preview-bar">
+      <span id="previewMeta">Live preview · 1080 × 1350</span>
+      <span class="heat" id="heatMeter" title="Heat meter">★★★★★ HEAT</span>
+    </div>
+    <div class="canvas-wrap"><canvas id="cover" width="1080" height="1350"></canvas></div>
+    <p class="tiny center">Original cover art made with your photos. No Rockstar logo, artwork or fonts — lettering is Anton &amp; Pacifico (SIL OFL), shipped under app/fonts/.</p>
+  </section>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
